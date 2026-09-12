@@ -382,6 +382,9 @@ button:hover{filter:brightness(.97)}
   object-fit:cover;
   object-position:center;
 }
+.interior-photo.vet-photo img{
+  object-position:center top;
+}
 .interior-photo span{
   display:block;
   padding:7px 8px;
@@ -392,7 +395,10 @@ button:hover{filter:brightness(.97)}
 @media(max-width:560px){
   .interior-gallery{grid-template-columns:repeat(3,1fr);gap:5px}
   .interior-photo img{height:88px}
-  .interior-photo span{font-size:9px;padding:6px 3px}
+  .interior-photo.vet-photo img{
+  object-position:center top;
+}
+.interior-photo span{font-size:9px;padding:6px 3px}
 }
 
 @media(max-width:850px){
@@ -410,6 +416,43 @@ button:hover{filter:brightness(.97)}
   .form-grid{grid-template-columns:1fr}
   .field.full{grid-column:auto}
 }
+
+@media(max-width:560px){
+  .wrap{
+    width:calc(100% - 12px);
+    max-width:none;
+  }
+  header .wrap{
+    width:calc(100% - 20px);
+  }
+  .hero{
+    padding:10px 0 30px;
+  }
+  .grid{
+    gap:18px;
+  }
+  .card{
+    width:100%;
+    margin:0;
+    padding:18px 14px;
+    border-radius:18px;
+  }
+  .card h2{
+    font-size:22px;
+  }
+  .form-grid{
+    gap:10px;
+  }
+  input,select{
+    height:52px;
+    font-size:16px;
+  }
+  button{
+    height:56px;
+    font-size:17px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -468,6 +511,10 @@ button:hover{filter:brightness(.97)}
         <div class="store-photo-caption">와이펫 부산해외동물검역센터 실제 매장</div>
       </div>
       <div class="interior-gallery">
+        <div class="interior-photo vet-photo">
+          <img src="ypet-veterinarian.png" alt="와이펫 대표 수의사">
+          <span>대표 수의사</span>
+        </div>
         <div class="interior-photo">
           <img src="ypet-interior-1.png" alt="와이펫 부산해외동물검역센터 상담 공간">
           <span>상담 공간</span>
@@ -476,10 +523,7 @@ button:hover{filter:brightness(.97)}
           <img src="ypet-interior-2.png" alt="와이펫 부산해외동물검역센터 진료 공간">
           <span>진료·검역 준비 공간</span>
         </div>
-        <div class="interior-photo">
-          <img src="ypet-veterinarian.png" alt="와이펫 대표 수의사">
-          <span>대표 수의사</span>
-        </div>
+      </div>
       </div>
     </section>
 
@@ -506,8 +550,8 @@ button:hover{filter:brightness(.97)}
         <div class="field">
           <label for="registered">동물등록(내장형) 여부</label>
           <select id="registered">
-            <option value="yes">등록했음</option>
-            <option value="no">등록 안 했음</option>
+            <option value="yes">등록</option>
+            <option value="no">미등록</option>
           </select>
         </div>
 
@@ -729,7 +773,7 @@ function showQuote(){
   const first=q.schedule.reduce((a,b)=>a.days<b.days?a:b);
 
   document.getElementById("resultTitle").textContent=country+" 출국 일정";
-  document.getElementById("resultRoute").textContent=pet+" · "+country+" · "+(registered==="yes"?"내장형 동물등록 완료":"내장형 동물등록 필요")+" · 출국 "+fmtDate(new Date(date+"T12:00:00"));
+  document.getElementById("resultRoute").textContent=pet+" · "+country+" · "+(registered==="yes"?"내장형 동물등록: 등록":"내장형 동물등록: 미등록")+" · 출국 "+fmtDate(new Date(date+"T12:00:00"));
   document.getElementById("resultPrice").textContent="총 예상 "+won(total);
   document.getElementById("firstVisit").textContent=fmtDate(addDays(date,first.days))+"까지";
   document.getElementById("totalPrice").textContent=won(total);
