@@ -453,6 +453,27 @@ button:hover{filter:brightness(.97)}
   }
 }
 
+
+.center-info{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#f8faff;
+  border:1px solid #e2e8f0;
+  color:#475569;
+  font-size:12px;
+  line-height:1.7;
+}
+.center-info b{color:var(--navy)}
+.center-info a{color:var(--blue);font-weight:900}
+.center-info span{white-space:nowrap}
+@media(max-width:560px){
+  .center-info{
+    font-size:12px;
+    padding:11px 12px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -570,6 +591,11 @@ button:hover{filter:brightness(.97)}
       </div>
 
       <button onclick="showQuote()">일정 및 금액 확인</button>
+
+      <div class="center-info">
+        <div><b>24시간 콜센터</b> : <a href="tel:01000000000">010-0000-0000</a></div>
+        <div><b>주소</b> : 부산시 수영구 수영로 576 지하상가 E존 <span>(수영역에서 1분)</span></div>
+      </div>
 
       <div id="result" class="result">
         <div class="result-head">
