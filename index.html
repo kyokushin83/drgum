@@ -365,8 +365,8 @@ button:hover{filter:brightness(.97)}
 }
 .interior-gallery{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
   margin-top:10px;
 }
 .interior-photo{
@@ -377,9 +377,10 @@ button:hover{filter:brightness(.97)}
 }
 .interior-photo img{
   width:100%;
-  height:150px;
+  height:118px;
   display:block;
   object-fit:cover;
+  object-position:center;
 }
 .interior-photo span{
   display:block;
@@ -389,7 +390,9 @@ button:hover{filter:brightness(.97)}
   color:var(--muted);
 }
 @media(max-width:560px){
-  .interior-photo img{height:115px}
+  .interior-gallery{grid-template-columns:repeat(3,1fr);gap:5px}
+  .interior-photo img{height:88px}
+  .interior-photo span{font-size:9px;padding:6px 3px}
 }
 
 @media(max-width:850px){
@@ -472,6 +475,10 @@ button:hover{filter:brightness(.97)}
         <div class="interior-photo">
           <img src="ypet-interior-2.png" alt="와이펫 부산해외동물검역센터 진료 공간">
           <span>진료·검역 준비 공간</span>
+        </div>
+        <div class="interior-photo">
+          <img src="ypet-veterinarian.png" alt="와이펫 대표 수의사">
+          <span>대표 수의사</span>
         </div>
       </div>
     </section>
