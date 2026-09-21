@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>닥터검역 Travel Pass 관리자</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="brand" href="index.html"><span class="logo">✚</span><span>닥터검역<small>Travel Pass Admin</small></span></a>
+    <a class="nav-link" href="index.html">공개 견적 홈</a>
+  </header>
+  <main class="shell page">
+    <div class="admin-head"><div><h1>고객 Travel Pass 관리</h1><p>고객 일정과 진행 단계를 한곳에서 관리합니다.</p></div><button id="new-button" class="btn btn-primary">＋ 고객 추가</button></div>
+    <div class="notice" style="margin-bottom:18px"><strong>개인정보 보호 및 1차 버전 안내</strong>현재 데이터는 이 브라우저의 localStorage에만 저장되며 로그인·암호화·기기간 동기화를 지원하지 않습니다. 공개 Google Sheet에는 이름, 연락처, 일정 등 개인정보를 절대 저장하지 마세요. 다른 기기의 고객에게 URL을 실제 공유하려면 인증이 적용된 Firebase 등 보안 데이터베이스 연동이 필요합니다.</div>
+
+    <div class="admin-layout">
+      <aside class="card customer-list">
+        <div class="list-toolbar"><input id="search" class="search" type="search" placeholder="보호자·반려동물·국가 검색" aria-label="고객 검색"></div>
+        <div id="customer-items" class="customer-items"></div>
+      </aside>
+
+      <section class="card editor">
+        <div class="editor-header"><h2 id="editor-title">고객 정보</h2><span id="id-badge" class="badge"></span></div>
+        <form id="customer-form">
+          <input id="customer-id" type="hidden">
+          <div class="form-grid">
+            <div class="field"><label for="guardian-name">보호자명 *</label><input id="guardian-name" required autocomplete="off"></div>
+            <div class="field"><label for="pet-name">반려동물명 *</label><input id="pet-name" required autocomplete="off"></div>
+            <div class="field"><label for="country">출국 국가 *</label><input id="country" required placeholder="예: 일본"></div>
+            <div class="field"><label for="departure-date">출국일 *</label><input id="departure-date" type="date" required></div>
+            <div class="field"><label for="current-step">현재 단계</label><select id="current-step"></select></div>
+            <div class="field"><label for="next-visit-date">다음 방문일</label><input id="next-visit-date" type="date"></div>
+            <div class="field full"><label for="next-action">다음 할 일</label><textarea id="next-action" placeholder="고객에게 보일 다음 준비사항"></textarea></div>
+            <div class="field full"><label>완료 단계</label><div id="steps-editor" class="steps-editor"></div></div>
+            <div class="field full"><label for="memo">관리자 메모 · 고객 화면에 표시</label><textarea id="memo" placeholder="고객에게 전달할 안내 메모"></textarea></div>
+            <div class="field full"><label for="customer-url">고객 전용 URL</label><div class="url-box"><input id="customer-url" readonly><button id="copy-url" type="button" class="btn btn-secondary">URL 복사</button><a id="open-url" class="btn btn-secondary" target="_blank" rel="noopener">미리보기</a></div></div>
+          </div>
+          <div class="editor-actions"><button class="btn btn-primary" type="submit">저장하기</button><button id="delete-button" class="btn btn-danger" type="button">고객 삭제</button><button id="reset-button" class="btn btn-secondary" type="button">샘플 복원</button></div>
+        </form>
+      </section>
+    </div>
+  </main>
+  <footer class="shell footer">데모 관리자 · 운영 전 보안 백엔드 연동 필수</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="data-store.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

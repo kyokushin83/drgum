@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>닥터검역 Travel Pass</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="brand" href="index.html"><span class="logo">✚</span><span>닥터검역<small>Dr. Quarantine</small></span></a>
+    <a class="nav-link" href="index.html">공개 견적 홈</a>
+  </header>
+
+  <main class="shell page">
+    <section id="not-found" class="card empty hidden">
+      <div class="icon">🔎</div>
+      <h1>Travel Pass를 찾을 수 없습니다</h1>
+      <p>주소의 고객 ID를 다시 확인해 주세요.<br>이 브라우저에 저장되지 않은 고객 정보는 표시되지 않습니다.</p>
+      <a class="btn btn-primary" href="index.html">홈으로 돌아가기</a>
+    </section>
+
+    <div id="pass" class="hidden">
+      <section class="card hero-card">
+        <p class="eyebrow">DR. QUARANTINE · TRAVEL PASS</p>
+        <h1><span id="pet-name"></span>의 해외출국 준비</h1>
+        <p class="sub"><span id="guardian-name"></span> 보호자님, 닥터검역이 출국일까지 함께합니다.</p>
+        <div class="hero-person">
+          <div class="pet-avatar">🐾</div>
+          <div><strong id="route"></strong><span id="departure"></span></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><small>출국까지</small><strong id="d-day"></strong></div>
+          <div class="stat"><small>준비 진행률</small><strong id="progress-number"></strong></div>
+          <div class="stat"><small>현재 단계</small><strong id="current-step"></strong></div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <div>
+          <section class="card section">
+            <div class="section-title"><h2>준비 현황</h2><span class="badge" id="completed-count"></span></div>
+            <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+            <div class="progress-copy"><span>전체 준비 일정</span><strong id="progress-copy"></strong></div>
+            <div class="next-box"><small>다음 해야 할 일</small><strong id="next-visit"></strong><p id="next-action"></p></div>
+          </section>
+
+          <section class="card section" style="margin-top:18px">
+            <div class="section-title"><h2>전체 준비 단계</h2><span class="badge">Checklist</span></div>
+            <ol id="timeline" class="timeline"></ol>
+          </section>
+        </div>
+
+        <aside>
+          <section class="card section">
+            <div class="section-title"><h2>담당자 메모</h2><span class="badge">안내</span></div>
+            <p class="memo" id="memo"></p>
+          </section>
+          <div class="notice" style="margin-top:18px"><strong>내용 확인이 필요하신가요?</strong>일정이나 준비 내용이 실제 안내와 다르면 닥터검역 담당자에게 문의해 주세요.</div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <footer class="shell footer">닥터검역 부산해외동물검역센터 · 고객 전용 Travel Pass</footer>
+  <script src="data-store.js"></script>
+  <script src="travel.js"></script>
+</body>
+</html>
