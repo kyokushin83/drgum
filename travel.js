@@ -5,7 +5,7 @@
   const customer = TravelPassStore.get(id);
   if (!customer) { $('not-found').classList.remove('hidden'); return; }
 
-  const steps = TravelPassStore.steps;
+  const steps = Array.isArray(customer.steps) && customer.steps.length ? customer.steps : TravelPassStore.steps;
   const completed = new Set(customer.completedStepIds);
   const progress = Math.round((completed.size / steps.length) * 100);
   const current = steps.find(step => step.id === customer.currentStepId) || steps[0];
@@ -42,4 +42,3 @@
   }).join('');
   $('pass').classList.remove('hidden');
 })();
-

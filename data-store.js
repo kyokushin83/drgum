@@ -24,8 +24,16 @@
   function clone(value) { return JSON.parse(JSON.stringify(value)); }
   function normalize(customer) {
     const clean = Object.assign({}, customer);
-    clean.completedStepIds = Array.isArray(clean.completedStepIds) ? clean.completedStepIds.filter(id => STEP_CATALOG.some(step => step.id === id)) : [];
-    if (!STEP_CATALOG.some(step => step.id === clean.currentStepId)) clean.currentStepId = STEP_CATALOG[0].id;
+    clean.steps = Array.isArray(clean.steps) && clean.steps.length
+      ? clean.steps.map((step, index) => ({
+          id: String(step.id || `step-${index + 1}`),
+          name: String(step.name || `준비 단계 ${index + 1}`),
+          description: String(step.description || ''),
+          days: Number(step.days) || 0
+        }))
+      : clone(STEP_CATALOG);
+    clean.completedStepIds = Array.isArray(clean.completedStepIds) ? clean.completedStepIds.filter(id => clean.steps.some(step => step.id === id)) : [];
+    if (!clean.steps.some(step => step.id === clean.currentStepId)) clean.currentStepId = clean.steps[0].id;
     return clean;
   }
   function read() {
@@ -74,7 +82,7 @@
       return clone(next);
     },
     remove(id) { write(read().filter(item => item.id !== id)); },
-    createBlank() { return { id: generateId(6), guardianName: '', petName: '', country: '', departureDate: '', nextVisitDate: '', nextAction: '', currentStepId: STEP_CATALOG[0].id, completedStepIds: [], memo: '' }; },
+    createBlank() { return { id: generateId(6), guardianName: '', petName: '', country: '', departureDate: '', nextVisitDate: '', nextAction: '', currentStepId: STEP_CATALOG[0].id, completedStepIds: [], steps: clone(STEP_CATALOG), memo: '' }; },
     resetSample() { write([clone(SAMPLE)]); return clone(SAMPLE); }
   };
 
@@ -82,4 +90,3 @@
   // 새 어댑터로 교체하면 화면 코드는 그대로 유지할 수 있습니다.
   global.TravelPassStore = api;
 })(window);
-

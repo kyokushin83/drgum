@@ -29,12 +29,12 @@
           <div class="form-grid">
             <div class="field"><label for="guardian-name">보호자명 *</label><input id="guardian-name" required autocomplete="off"></div>
             <div class="field"><label for="pet-name">반려동물명 *</label><input id="pet-name" required autocomplete="off"></div>
-            <div class="field"><label for="country">출국 국가 *</label><input id="country" required placeholder="예: 일본"></div>
+            <div class="field"><label for="country">출국 국가 *</label><input id="country" required list="country-options" placeholder="예: 일본"><datalist id="country-options"></datalist></div>
             <div class="field"><label for="departure-date">출국일 *</label><input id="departure-date" type="date" required></div>
             <div class="field"><label for="current-step">현재 단계</label><select id="current-step"></select></div>
             <div class="field"><label for="next-visit-date">다음 방문일</label><input id="next-visit-date" type="date"></div>
             <div class="field full"><label for="next-action">다음 할 일</label><textarea id="next-action" placeholder="고객에게 보일 다음 준비사항"></textarea></div>
-            <div class="field full"><label>완료 단계</label><div id="steps-editor" class="steps-editor"></div></div>
+            <div class="field full"><label>완료 단계 <span id="schedule-status" style="font-weight:700;color:#64748b"></span></label><div id="steps-editor" class="steps-editor"></div></div>
             <div class="field full"><label for="memo">관리자 메모 · 고객 화면에 표시</label><textarea id="memo" placeholder="고객에게 전달할 안내 메모"></textarea></div>
             <div class="field full"><label for="customer-url">고객 전용 URL</label><div class="url-box"><input id="customer-url" readonly><button id="copy-url" type="button" class="btn btn-secondary">URL 복사</button><a id="open-url" class="btn btn-secondary" target="_blank" rel="noopener">미리보기</a></div></div>
           </div>
