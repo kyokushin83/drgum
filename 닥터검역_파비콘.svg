@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">닥터검역 파비콘</title>
+  <desc id="desc">해외 반려동물 검역을 상징하는 십자가와 발바닥 아이콘</desc>
+  <defs>
+    <linearGradient id="bg" x1="64" y1="52" x2="448" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2f80ed"/>
+      <stop offset="1" stop-color="#0b1f4a"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#071836" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect x="22" y="22" width="468" height="468" rx="126" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="188" fill="none" stroke="#bfe7ff" stroke-width="10" opacity=".4"/>
+  <path d="M328 92a188 188 0 0 1 0 328M184 92a188 188 0 0 0 0 328M72 256h368M104 174h304M104 338h304" fill="none" stroke="#bfe7ff" stroke-width="9" opacity=".28" stroke-linecap="round"/>
+  <g filter="url(#shadow)">
+    <rect x="143" y="117" width="226" height="226" rx="52" fill="#fff"/>
+    <rect x="232" y="151" width="48" height="158" rx="18" fill="#1677e8"/>
+    <rect x="177" y="206" width="158" height="48" rx="18" fill="#1677e8"/>
+  </g>
+  <g fill="#fff" stroke="#0b1f4a" stroke-width="10" stroke-linejoin="round">
+    <ellipse cx="256" cy="366" rx="55" ry="43"/>
+    <ellipse cx="190" cy="334" rx="24" ry="31" transform="rotate(-25 190 334)"/>
+    <ellipse cx="221" cy="310" rx="23" ry="30" transform="rotate(-9 221 310)"/>
+    <ellipse cx="291" cy="310" rx="23" ry="30" transform="rotate(9 291 310)"/>
+    <ellipse cx="322" cy="334" rx="24" ry="31" transform="rotate(25 322 334)"/>
+  </g>
+  <path d="M170 422c38 22 134 22 172 0" fill="none" stroke="#75c8ff" stroke-width="12" stroke-linecap="round"/>
+</svg>
