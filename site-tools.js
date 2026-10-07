@@ -19,7 +19,7 @@
     if(country) [...country.options].forEach(o=>{const k=o.dataset.ko||(o.dataset.ko=o.textContent.trim());if(!k)return;o.textContent=lang==='en'?(k==='국가 불러오는 중...'?d.countryLoading:k==='국가 선택'?d.countryChoose:(countryEN[k]||k)):k;});
     if(registered){registered.options[0].textContent=d.registered;registered.options[1].textContent=d.unregistered;}
     if(pet){pet.options[0].textContent=d.dog;pet.options[1].textContent=d.cat;}
-    if(date){date.lang=lang==='en'?'en-US':'ko-KR';date.setAttribute('aria-label',d.labels[3]);}
+    if(date){const value=date.value;if(lang==='en'){if(date.type!=='text')date.type='text';date.value=value;date.placeholder='YYYY-MM-DD';date.inputMode='numeric';date.lang='en-US';}else{if(date.type!=='date')date.type='date';date.value=value;date.placeholder='';date.lang='ko-KR';}date.setAttribute('aria-label',d.labels[3]);}
   }
   function apply(next){
     lang=next; const d=lang==='en'?en:ko; document.documentElement.lang=lang;
