@@ -1,32 +1,20 @@
-import * as TravelPassStore from './firebase-store.js?v=20261012-1';
+import { getShared } from './firebase-share.js?v=20261012-3';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
-  const id = new URLSearchParams(location.search).get('id');
+  const token = new URLSearchParams(location.hash.slice(1)).get('token');
   const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-  $('travel-login').onclick = () => TravelPassStore.login().catch(() => { $('travel-auth-status').textContent = '로그인에 실패했습니다. 다시 시도해 주세요.'; });
-  $('travel-logout').onclick = () => TravelPassStore.logout();
-  let version = 0;
-  TravelPassStore.observeAuth(async user => {
-    const currentVersion = ++version;
-    $('pass').classList.add('hidden');
-    $('not-found').classList.add('hidden');
-    document.title = '닥터검역 Travel Pass';
-    $('travel-login').hidden = !!user;
-    $('travel-logout').hidden = !user;
-    $('travel-auth-status').textContent = user ? '고객 계정 UID: ' + user.uid + ' · 담당자에게 이 UID를 알려 주세요.' : '담당자에게 등록한 Google 계정으로 로그인해 주세요.';
-    if (!user) return;
+  async function load() {
     try {
-      const customer = await TravelPassStore.get(id);
-      if (currentVersion !== version) return;
-      if (!customer) { $('not-found').classList.remove('hidden'); return; }
+      const customer = await getShared(token);
+      if (!customer) throw new Error('공유 링크를 찾을 수 없습니다.');
       render(customer);
+      $('travel-load-status').textContent = '';
     } catch(error) {
-      if (currentVersion !== version) return;
+      $('travel-load-status').textContent = '진행 현황을 조회할 수 없습니다. 링크와 인터넷 연결을 확인해 주세요.';
       $('not-found').classList.remove('hidden');
-      $('travel-auth-status').textContent = '조회할 수 없습니다. 계정 UID: ' + user.uid + ' · 담당자에게 계정 등록 및 주소 확인을 요청해 주세요.';
     }
-  });
+  }
   function render(customer) {
 
   const steps = Array.isArray(customer.steps) && customer.steps.length ? customer.steps : TravelPassStore.steps;
@@ -44,7 +32,6 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
 
   document.title = `${customer.petName || '반려동물'} Travel Pass | 닥터검역`;
   $('pet-name').textContent = customer.petName || '반려동물';
-  $('guardian-name').textContent = customer.guardianName || '고객';
   $('route').textContent = `${customer.country || '목적지 확인 중'} 출국`;
   $('departure').textContent = `출국일 ${dateText(customer.departureDate)}`;
   $('d-day').textContent = dDay(customer.departureDate);
@@ -66,4 +53,6 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
   }).join('');
   $('pass').classList.remove('hidden');
   }
+
+  load();
 })();

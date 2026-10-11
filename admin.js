@@ -1,4 +1,4 @@
-import * as TravelPassStore from './firebase-store.js?v=20261012-1';
+import * as TravelPassStore from './firebase-store.js?v=20261012-3';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -74,7 +74,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
     }
   }
 
-  function travelUrl(id) { return new URL(`travel.html?id=${encodeURIComponent(id)}`, location.href).href; }
+  function travelUrl(token) { return new URL(`travel.html#token=${encodeURIComponent(token)}`, location.href).href; }
   function showToast(message) {
     $('toast').textContent = message; $('toast').classList.add('show');
     clearTimeout(showToast.timer); showToast.timer = setTimeout(() => $('toast').classList.remove('show'), 2200);
@@ -99,15 +99,22 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
     $('next-visit-date').value = customer.nextVisitDate || '';
     $('next-action').value = customer.nextAction || '';
     $('memo').value = customer.memo || '';
-    $('customer-uid').value = customer.customerUid || '';
+    $('share-enabled').checked = customer.shareEnabled !== false;
     applyCountrySchedule(customer.country, customer.completedStepIds, customer.currentStepId, customer.steps);
     $('editor-title').textContent = isNew ? '새 고객 등록' : `${customer.petName || '고객'} Travel Pass`;
     $('id-badge').textContent = customer.id;
-    const shareable = !isNew && !!customer.customerUid;
-    $('customer-url').value = shareable ? travelUrl(customer.id) : '';
+    const shareable = !isNew && !!customer.shareToken && customer.shareEnabled !== false;
+    $('customer-url').value = shareable ? travelUrl(customer.shareToken) : '';
     $('open-url').removeAttribute('href');
-    if (shareable) $('open-url').href = travelUrl(customer.id);
+    if (shareable) $('open-url').href = travelUrl(customer.shareToken);
     $('copy-url').disabled = !shareable;
+    $('customer-url-status').textContent = customer.shareError
+      ? '고객 정보는 저장됐지만 공유 설정 반영에 실패했습니다. Firebase 공유 규칙 게시 및 연결을 확인한 뒤 다시 저장해 주세요. 기존 공유 링크는 계속 열릴 수 있습니다.'
+      : customer.shareEnabled === false
+        ? '고객 링크 공유가 중지되었습니다.'
+        : shareable
+          ? '로그인 없이 열리는 고객 URL입니다. 마지막 저장일부터 180일간 유효하며 공유 체크를 해제하고 저장하면 접근이 중지됩니다.'
+          : '고객 정보를 저장하면 전용 URL이 생성됩니다.';
     $('delete-button').classList.toggle('hidden', isNew);
     renderList().catch(reportError);
   }
@@ -115,7 +122,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
   function newCustomer() { fill(TravelPassStore.createBlank(), true); $('guardian-name').focus(); }
   function formValue() {
     return {
-      id: $('customer-id').value, customerUid: $('customer-uid').value.trim(), guardianName: $('guardian-name').value.trim(), petName: $('pet-name').value.trim(),
+      id: $('customer-id').value, shareEnabled: $('share-enabled').checked, guardianName: $('guardian-name').value.trim(), petName: $('pet-name').value.trim(),
       country: $('country').value.trim(), departureDate: $('departure-date').value,
       currentStepId: $('current-step').value, nextVisitDate: $('next-visit-date').value,
       nextAction: $('next-action').value.trim(), memo: $('memo').value.trim(),
@@ -150,7 +157,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
     mutate(async () => {
       const saved = await TravelPassStore.save(value);
       if (!TravelPassStore.isAdmin(TravelPassStore.auth.currentUser)) return;
-      fill(saved, false); showToast('Firestore에 고객 정보가 저장되었습니다.');
+      fill(saved, false); showToast(saved.shareError ? '고객 저장 완료 · 공유 링크 생성은 실패했습니다.' : '고객 정보와 공유 설정이 저장되었습니다.');
     });
   });
   $('new-button').addEventListener('click', newCustomer);
@@ -191,6 +198,8 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
     $('customer-items').replaceChildren();
     $('customer-form').reset();
     $('open-url').removeAttribute('href');
+    $('customer-url-status').textContent = '';
+    $('copy-url').disabled = true;
     selectedId = null;
     $('auth-status').textContent = allowed ? 'Firestore 연결 확인 중…' : user ? '이 계정은 관리자 권한이 없습니다.' : '관리자 Google 로그인이 필요합니다.';
     if (!allowed) return;
@@ -201,7 +210,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-1';
       $('new-button').disabled = false;
       $('import-local').disabled = false;
       $('auth-status').textContent = user.email + ' · Firestore 연결됨';
-      if (initial) fill(initial, false); else newCustomer();
+      if (initial) await select(initial.id); else newCustomer();
       loadSchedules();
     } catch (error) {
       if (version !== authVersion) return;

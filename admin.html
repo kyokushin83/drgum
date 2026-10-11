@@ -14,7 +14,7 @@
   </header>
   <main class="shell page">
     <div class="admin-head"><div><h1>고객 Travel Pass 관리</h1><p>고객 일정과 진행 단계를 한곳에서 관리합니다.</p></div><button id="new-button" disabled class="btn btn-primary">＋ 고객 추가</button></div>
-    <div class="notice" style="margin-bottom:18px"><strong>Firestore 고객 관리</strong>관리자 Google 로그인 후 저장합니다. 고객 URL은 지정한 고객 계정으로 로그인해야 열립니다. 관리자 로그인 후 고객을 저장·조회할 수 있습니다.</div>
+    <div class="notice" style="margin-bottom:18px"><strong>고객 진행 현황 공유</strong>관리자는 Google 로그인 후 저장합니다. 고객은 계정 연결 없이 전용 링크로 일정과 진행 현황을 확인합니다. 공유 체크를 해제하고 저장하면 링크 접근이 중지됩니다.</div>
     <div class="card" style="padding:16px;margin-bottom:18px"><span id="auth-status" role="status">로그인 확인 중…</span> <button id="admin-login" class="btn btn-primary" type="button">Google 로그인</button> <button id="admin-logout" class="btn btn-secondary" type="button" hidden>로그아웃</button> <button id="import-local" class="btn btn-secondary" type="button" disabled>이 브라우저의 기존 고객 가져오기</button></div>
 
     <div class="admin-layout">
@@ -37,8 +37,8 @@
             <div class="field full"><label for="next-action">다음 할 일</label><textarea id="next-action" maxlength="5000" placeholder="고객에게 보일 다음 준비사항"></textarea></div>
             <div class="field full"><label>완료 단계 <span id="schedule-status" style="font-weight:700;color:#64748b"></span></label><div id="steps-editor" class="steps-editor"></div></div>
             <div class="field full"><label for="memo">관리자 메모 · 고객 화면에 표시</label><textarea id="memo" maxlength="5000" placeholder="고객에게 전달할 안내 메모"></textarea></div>
-            <div class="field full"><label for="customer-uid">고객 Firebase Auth UID · URL 열람 계정</label><input id="customer-uid" maxlength="128" autocomplete="off" placeholder="Firebase Authentication에서 확인한 고객 계정 UID"><small>고객이 Google 로그인한 뒤 생성된 UID를 등록하세요. 빈 값이면 관리자만 조회합니다.</small></div>
-            <div class="field full"><label for="customer-url">고객 전용 URL</label><div class="url-box"><input id="customer-url" readonly><button id="copy-url" type="button" class="btn btn-secondary">URL 복사</button><a id="open-url" class="btn btn-secondary" target="_blank" rel="noopener">미리보기</a></div></div>
+            <div class="field full"><label class="check-row"><input id="share-enabled" type="checkbox" checked><span>고객 링크 공유</span></label><small>링크를 가진 사람은 일정·진행 단계·고객 안내 메모를 조회할 수 있습니다. 보호자명과 관리자 계정 정보는 공유하지 않습니다.</small></div>
+            <div class="field full"><label for="customer-url">고객 전용 URL</label><div class="url-box"><input id="customer-url" readonly aria-describedby="customer-url-status"><button id="copy-url" type="button" class="btn btn-secondary">URL 복사</button><a id="open-url" class="btn btn-secondary" target="_blank" rel="noopener">미리보기</a></div><small id="customer-url-status" role="status" aria-live="polite"></small></div>
           </div>
           <div class="editor-actions"><button class="btn btn-primary" type="submit">저장하기</button><button id="delete-button" class="btn btn-danger" type="button">고객 삭제</button></div>
         </fieldset></form>
@@ -47,7 +47,7 @@
   </main>
   <footer class="shell footer">닥터검역 · 인증된 관리자 전용</footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="admin.js?v=20261012-1"></script>
-  <script type="module" src="consultation-admin.js?v=20261012-1"></script>
+  <script type="module" src="admin.js?v=20261012-3"></script>
+  <script type="module" src="consultation-admin.js?v=20261012-3"></script>
 </body>
 </html>
