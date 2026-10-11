@@ -17,7 +17,8 @@ import { getShared } from './firebase-share.js?v=20261012-3';
   }
   function render(customer) {
 
-  const steps = Array.isArray(customer.steps) && customer.steps.length ? customer.steps : TravelPassStore.steps;
+  const steps = customer.steps;
+  if (!Array.isArray(steps) || !steps.length) throw new Error('진행 단계 정보를 확인해 주세요.');
   const completed = new Set(customer.completedStepIds);
   const progress = Math.round((completed.size / steps.length) * 100);
   const current = steps.find(step => step.id === customer.currentStepId) || steps[0];
