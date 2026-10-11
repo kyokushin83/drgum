@@ -1,12 +1,15 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Server-enforced allowlist, matching the existing consultation administrators.
+    // Existing consultation policy, preserved from the Firebase Console.
     function admin() {
-      return request.auth != null
+      return request.auth != null && request.auth.token.email in
+        ['kyokushin83@naver.com', 'vetjin79@gmail.com', 'dion5280@naver.com'];
+    }
+    function travelAdmin() {
+      return admin()
         && request.auth.token.email_verified == true
-        && request.auth.token.firebase.sign_in_provider == 'google.com'
-        && request.auth.token.email in ['kyokushin83@naver.com', 'vetjin79@gmail.com', 'dion5280@naver.com'];
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
     function validCustomer() {
       let d = request.resource.data;
@@ -28,36 +31,28 @@ service cloud.firestore {
         && d.updatedAt == request.time && d.updatedBy == request.auth.uid;
     }
     match /travelCustomers/{customerId} {
-      allow get: if admin() || (request.auth != null
+      allow get: if travelAdmin() || (request.auth != null
         && request.auth.token.email_verified == true
         && request.auth.token.firebase.sign_in_provider == 'google.com'
         && resource.data.customerUid == request.auth.uid);
-      allow list: if admin();
-      allow create: if admin() && validCustomer()
+      allow list: if travelAdmin();
+      allow create: if travelAdmin() && validCustomer()
         && customerId.matches('^[A-Za-z0-9_-]{1,128}$')
         && request.resource.data.createdAt == request.time
         && request.resource.data.createdBy == request.auth.uid;
-      allow update: if admin() && validCustomer()
+      allow update: if travelAdmin() && validCustomer()
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdBy == resource.data.createdBy;
-      allow delete: if admin();
+      allow delete: if travelAdmin();
     }
-    // Existing public booking form: create only, with bounded payload and server timestamp.
-    match /consultations/{consultationId} {
-      allow read, update, delete: if admin();
-      allow create: if request.resource.data.keys().hasAll(['phone','country','departureDate','pet','registered','total','firstVisit','status','called','createdAt'])
-        && request.resource.data.keys().hasOnly(['phone','country','departureDate','pet','registered','total','firstVisit','status','called','createdAt'])
-        && request.resource.data.phone is string
-        && request.resource.data.phone.matches('^[0-9+() -]{9,20}$')
-        && request.resource.data.country is string && request.resource.data.country.size() <= 100
-        && request.resource.data.departureDate is string && request.resource.data.departureDate.size() <= 20
-        && request.resource.data.pet is string && request.resource.data.pet.size() <= 100
-        && request.resource.data.registered in ['등록','미등록']
-        && request.resource.data.total is string && request.resource.data.total.size() <= 100
-        && request.resource.data.firstVisit is string && request.resource.data.firstVisit.size() <= 200
+    match /consultations/{id} {
+      allow create: if request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 9
+        && request.resource.data.phone.size() <= 20
         && request.resource.data.status == '미연락'
-        && request.resource.data.called == false
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.called == false;
+      allow read, update: if admin();
+      allow delete: if false;
     }
     match /{document=**} { allow read, write: if false; }
   }
