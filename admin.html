@@ -27,7 +27,11 @@
         <div class="editor-header"><h2 id="editor-title">고객 정보</h2><span id="id-badge" class="badge"></span></div>
         <form id="customer-form"><fieldset id="editor-fields" disabled style="border:0;padding:0;margin:0;min-width:0">
           <input id="customer-id" type="hidden">
-          <div class="form-grid">
+          <div role="tablist" aria-label="고객 관리 항목" style="display:flex;gap:8px;margin-bottom:18px">
+            <button id="customer-tab" type="button" role="tab" aria-selected="true" aria-controls="customer-panel" class="btn btn-primary">고객 정보</button>
+            <button id="payment-tab" type="button" role="tab" aria-selected="false" aria-controls="payment-panel" tabindex="-1" class="btn btn-secondary">결제 관리</button>
+          </div>
+          <div id="customer-panel" role="tabpanel" aria-labelledby="customer-tab" class="form-grid">
             <div class="field"><label for="guardian-name">보호자명 *</label><input id="guardian-name" maxlength="100" required autocomplete="off"></div>
             <div class="field"><label for="pet-name">반려동물명 *</label><input id="pet-name" maxlength="100" required autocomplete="off"></div>
             <div class="field"><label for="country">출국 국가 *</label><input id="country" maxlength="100" required list="country-options" placeholder="예: 일본"><datalist id="country-options"></datalist></div>
@@ -40,6 +44,12 @@
             <div class="field full"><label class="check-row"><input id="share-enabled" type="checkbox" checked><span>고객 링크 공유</span></label><small>링크를 가진 사람은 일정·진행 단계·고객 안내 메모를 조회할 수 있습니다. 보호자명과 관리자 계정 정보는 공유하지 않습니다.</small></div>
             <div class="field full"><label for="customer-url">고객 전용 URL</label><div class="url-box"><input id="customer-url" readonly aria-describedby="customer-url-status"><button id="copy-url" type="button" class="btn btn-secondary">URL 복사</button><a id="open-url" class="btn btn-secondary" target="_blank" rel="noopener">미리보기</a></div><small id="customer-url-status" role="status" aria-live="polite"></small></div>
           </div>
+          <div id="payment-panel" role="tabpanel" aria-labelledby="payment-tab" class="form-grid hidden" hidden>
+            <div class="field full"><p style="margin:0;color:#64748b">결제 정보는 모두 선택 입력이며 관리자만 볼 수 있습니다. 입력 후 아래 저장하기를 눌러 주세요.</p></div>
+            <div class="field"><label for="expected-payment">예상 결제금액 (원) · 선택</label><input id="expected-payment" type="number" inputmode="numeric" min="0" max="9999999999" step="1" placeholder="예: 500000"></div>
+            <div class="field"><label for="actual-payment">실제 결제금액 (원) · 선택</label><input id="actual-payment" type="number" inputmode="numeric" min="0" max="9999999999" step="1" placeholder="예: 480000"></div>
+            <div class="field full"><label for="payment-memo">결제 관련 메모 · 선택</label><textarea id="payment-memo" maxlength="5000" placeholder="예: 계약금 수납, 잔금 예정일, 할인·환불 안내 등"></textarea></div>
+          </div>
           <div class="editor-actions"><button class="btn btn-primary" type="submit">저장하기</button><button id="delete-button" class="btn btn-danger" type="button">고객 삭제</button></div>
         </fieldset></form>
       </section>
@@ -47,7 +57,7 @@
   </main>
   <footer class="shell footer">닥터검역 · 인증된 관리자 전용</footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="admin.js?v=20261012-4"></script>
-  <script type="module" src="consultation-admin.js?v=20261012-4"></script>
+  <script type="module" src="admin.js?v=20261012-6"></script>
+  <script type="module" src="consultation-admin.js?v=20261012-6"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-import * as TravelPassStore from './firebase-store.js?v=20261012-4';
+import * as TravelPassStore from './firebase-store.js?v=20261012-6';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -99,6 +99,9 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-4';
     $('next-visit-date').value = customer.nextVisitDate || '';
     $('next-action').value = customer.nextAction || '';
     $('memo').value = customer.memo || '';
+    $('expected-payment').value = customer.payment?.expectedAmount ?? '';
+    $('actual-payment').value = customer.payment?.actualAmount ?? '';
+    $('payment-memo').value = customer.payment?.memo || '';
     $('share-enabled').checked = customer.shareEnabled !== false;
     applyCountrySchedule(customer.country, customer.completedStepIds, customer.currentStepId, customer.steps);
     $('editor-title').textContent = isNew ? '새 고객 등록' : `${customer.petName || '고객'} Travel Pass`;
@@ -128,6 +131,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-4';
       country: $('country').value.trim(), departureDate: $('departure-date').value,
       currentStepId: $('current-step').value, nextVisitDate: $('next-visit-date').value,
       nextAction: $('next-action').value.trim(), memo: $('memo').value.trim(),
+      payment: {expectedAmount: $('expected-payment').value, actualAmount: $('actual-payment').value, memo: $('payment-memo').value.trim()},
       steps: currentSteps,
       completedStepIds: Array.from(document.querySelectorAll('[name="completed-step"]:checked')).map(box => box.value)
     };
@@ -137,6 +141,30 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-4';
     console.error(error);
     showToast(error.code === 'permission-denied' ? '접근이 거부되었습니다. Firebase 보안 규칙과 관리자 계정을 확인해 주세요.' : (error.message || '저장소 연결을 확인해 주세요.'));
   }
+  function activateTab(name) {
+    for (const item of ['customer', 'payment']) {
+      const active = item === name;
+      const tab = $(item + '-tab');
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      tab.classList.toggle('btn-primary', active);
+      tab.classList.toggle('btn-secondary', !active);
+      $(item + '-panel').hidden = !active;
+      $(item + '-panel').classList.toggle('hidden', !active);
+    }
+  }
+  for (const name of ['customer', 'payment']) {
+    $(name + '-tab').addEventListener('click', () => activateTab(name));
+    $(name + '-tab').addEventListener('keydown', event => {
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 'customer' : event.key === 'End' ? 'payment' : name === 'customer' ? 'payment' : 'customer';
+      activateTab(next); $(next + '-tab').focus();
+    });
+  }
+  $('customer-form').addEventListener('invalid', event => {
+    activateTab(event.target.closest('#payment-panel') ? 'payment' : 'customer');
+  }, true);
   let busy = false;
   async function mutate(action) {
     if (busy) return;

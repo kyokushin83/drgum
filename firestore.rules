@@ -11,10 +11,22 @@ service cloud.firestore {
         && request.auth.token.email_verified == true
         && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
+    function validPaymentAmount(value) {
+      return value == null || (value is int && value >= 0 && value <= 9999999999);
+    }
+    function validPayment(value) {
+      return value is map
+        && value.keys().hasAll(['expectedAmount','actualAmount','memo'])
+        && value.keys().hasOnly(['expectedAmount','actualAmount','memo'])
+        && validPaymentAmount(value.expectedAmount)
+        && validPaymentAmount(value.actualAmount)
+        && value.memo is string && value.memo.size() <= 5000;
+    }
     function validCustomer() {
       let d = request.resource.data;
       return d.keys().hasAll(['guardianName','petName','country','departureDate','nextVisitDate','nextAction','currentStepId','completedStepIds','steps','memo','customerUid','schemaVersion','createdAt','createdBy','updatedAt','updatedBy'])
-        && d.keys().hasOnly(['guardianName','petName','country','departureDate','nextVisitDate','nextAction','currentStepId','completedStepIds','steps','memo','customerUid','schemaVersion','createdAt','createdBy','updatedAt','updatedBy'])
+        && d.keys().hasOnly(['guardianName','petName','country','departureDate','nextVisitDate','nextAction','currentStepId','completedStepIds','steps','memo','customerUid','schemaVersion','createdAt','createdBy','updatedAt','updatedBy','payment'])
+        && (!('payment' in d) || validPayment(d.payment))
         && d.guardianName is string && d.guardianName.size() > 0 && d.guardianName.size() <= 100
         && d.petName is string && d.petName.size() > 0 && d.petName.size() <= 100
         && d.country is string && d.country.size() > 0 && d.country.size() <= 100

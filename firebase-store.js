@@ -31,6 +31,18 @@ function shareRef(token) {
 function newToken() {
   return Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2,'0')).join('');
 }
+function normalizePayment(value = {}) {
+  function amount(input) {
+    if (input === undefined || input === null || String(input).trim() === '') return null;
+    if (!['string','number'].includes(typeof input)) throw new Error('결제금액은 0 이상의 원 단위 정수로 입력해 주세요.');
+    const number = Number(input);
+    if (!Number.isSafeInteger(number) || number < 0 || number > 9999999999) throw new Error('결제금액은 0원부터 9,999,999,999원까지 정수로 입력해 주세요.');
+    return number;
+  }
+  const memo = String(value?.memo || '').trim();
+  if (memo.length > 5000) throw new Error('결제 메모는 5,000자 이내로 입력해 주세요.');
+  return {expectedAmount:amount(value?.expectedAmount), actualAmount:amount(value?.actualAmount), memo};
+}
 export function createBlank() {
   return model.normalize({id:crypto.randomUUID(),guardianName:'',petName:'',country:'',departureDate:'',nextVisitDate:'',nextAction:'',currentStepId:steps[0].id,completedStepIds:[],memo:'',customerUid:'',shareEnabled:true});
 }
@@ -84,6 +96,7 @@ export async function save(customer, createOnly = false) {
   requireAdmin();
   const user = auth.currentUser;
   const next = model.normalize(customer);
+  const providedPayment = next.payment === undefined ? undefined : normalizePayment(next.payment);
   const fields = ['guardianName','petName','country','departureDate','nextVisitDate','nextAction','currentStepId','memo','customerUid'];
   const data = Object.fromEntries(fields.map(k => [k,String(next[k] || '').trim()]));
   data.customerUid = ''; // Private records are administrator-only; customers use a separate projection.
@@ -95,6 +108,9 @@ export async function save(customer, createOnly = false) {
     const ref = reference(next.id);
     const previous = await tx.get(ref);
     if (createOnly && previous.exists()) throw new Error('이미 등록된 고객 ID입니다: ' + next.id);
+    const payment = providedPayment ?? normalizePayment(previous.exists() ? previous.data().payment : undefined);
+    if (payment.expectedAmount !== null || payment.actualAmount !== null || payment.memo) data.payment = payment;
+    else delete data.payment;
     tx.set(ref, {...data, createdAt:previous.exists() ? previous.data().createdAt : serverTimestamp(),
       createdBy:previous.exists() ? previous.data().createdBy : user.uid,
       updatedAt:serverTimestamp(),updatedBy:user.uid});
