@@ -1,5 +1,5 @@
 import { app } from "./firebase-config.js?v=20261012-1";
-import { login as adminLogin, logout as adminLogout } from "./firebase-store.js?v=20261012-6";
+import { login as adminLogin, logout as adminLogout } from "./firebase-store.js?v=20261012-7";
 import{getFirestore,collection,query,orderBy,onSnapshot,updateDoc,doc}from"https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 const db=getFirestore(app),auth=getAuth(app),allow=["kyokushin83@naver.com","vetjin79@gmail.com","dion5280@naver.com"];

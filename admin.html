@@ -19,7 +19,7 @@
 
     <div class="admin-layout">
       <aside class="card customer-list">
-        <div class="list-toolbar"><input id="search" class="search" type="search" placeholder="보호자·반려동물·국가 검색" aria-label="고객 검색"></div>
+        <div class="list-toolbar"><input id="search" class="search" type="search" placeholder="보호자·반려동물·국가·병원 검색" aria-label="고객 검색"></div>
         <div id="customer-items" class="customer-items"></div>
       </aside>
 
@@ -34,6 +34,7 @@
           <div id="customer-panel" role="tabpanel" aria-labelledby="customer-tab" class="form-grid">
             <div class="field"><label for="guardian-name">보호자명 *</label><input id="guardian-name" maxlength="100" required autocomplete="off"></div>
             <div class="field"><label for="pet-name">반려동물명 *</label><input id="pet-name" maxlength="100" required autocomplete="off"></div>
+            <div class="field full"><label for="partner-hospital">연계병원 · 선택</label><select id="partner-hospital"><option value="">미선택</option></select></div>
             <div class="field"><label for="country">출국 국가 *</label><input id="country" maxlength="100" required list="country-options" placeholder="예: 일본"><datalist id="country-options"></datalist></div>
             <div class="field"><label for="departure-date">출국일 *</label><input id="departure-date" type="date" required></div>
             <div class="field"><label for="current-step">현재 단계</label><select id="current-step"></select></div>
@@ -57,7 +58,7 @@
   </main>
   <footer class="shell footer">닥터검역 · 인증된 관리자 전용</footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="admin.js?v=20261012-6"></script>
-  <script type="module" src="consultation-admin.js?v=20261012-6"></script>
+  <script type="module" src="admin.js?v=20261012-7"></script>
+  <script type="module" src="consultation-admin.js?v=20261012-7"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 import './data-store.js?v=20261011-1';
+import {normalizePartnerHospital} from './partner-hospitals.js?v=20261012-7';
 import { app, adminEmails, travelPassEnabled } from './firebase-config.js?v=20261012-1';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy, runTransaction, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
@@ -97,6 +98,7 @@ export async function save(customer, createOnly = false) {
   const user = auth.currentUser;
   const next = model.normalize(customer);
   const providedPayment = next.payment === undefined ? undefined : normalizePayment(next.payment);
+  const providedHospital = next.partnerHospitalId === undefined ? undefined : normalizePartnerHospital(next.partnerHospitalId);
   const fields = ['guardianName','petName','country','departureDate','nextVisitDate','nextAction','currentStepId','memo','customerUid'];
   const data = Object.fromEntries(fields.map(k => [k,String(next[k] || '').trim()]));
   data.customerUid = ''; // Private records are administrator-only; customers use a separate projection.
@@ -108,6 +110,9 @@ export async function save(customer, createOnly = false) {
     const ref = reference(next.id);
     const previous = await tx.get(ref);
     if (createOnly && previous.exists()) throw new Error('이미 등록된 고객 ID입니다: ' + next.id);
+    const hospital = providedHospital ?? normalizePartnerHospital(previous.exists() ? previous.data().partnerHospitalId : undefined);
+    if (hospital) data.partnerHospitalId = hospital;
+    else delete data.partnerHospitalId;
     const payment = providedPayment ?? normalizePayment(previous.exists() ? previous.data().payment : undefined);
     if (payment.expectedAmount !== null || payment.actualAmount !== null || payment.memo) data.payment = payment;
     else delete data.payment;

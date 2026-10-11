@@ -1,4 +1,5 @@
-import * as TravelPassStore from './firebase-store.js?v=20261012-6';
+import * as TravelPassStore from './firebase-store.js?v=20261012-7';
+import {partnerHospitals, findPartnerHospital} from './partner-hospitals.js?v=20261012-7';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -8,6 +9,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-6';
   let schedulesByCountry = {};
   const SHEET_ID = '1bKBW8lEp7bY1e_1BdwQrwxF84WU00ytedpZqKme0QRQ';
   const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
+  $('partner-hospital').innerHTML = '<option value="">미선택</option>' + partnerHospitals.map(hospital => `<option value="${hospital.id}">${escapeHtml(hospital.name)} (${escapeHtml(hospital.region)})</option>`).join('');
 
   function csvUrl(sheetName) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}&_=${Date.now()}`; }
   function parseCSV(text) {
@@ -85,8 +87,11 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-6';
     const version = authVersion;
     const items = await TravelPassStore.list();
     if (!uid || version !== authVersion || uid !== TravelPassStore.auth.currentUser?.uid) return;
-    const customers = items.filter(item => [item.guardianName,item.petName,item.country,item.id].join(' ').toLowerCase().includes(searchTerm));
-    $('customer-items').innerHTML = customers.length ? customers.map(item => `<button type="button" class="customer-item ${item.id === selectedId ? 'active' : ''}" data-id="${escapeHtml(item.id)}"><strong>${escapeHtml(item.petName || '이름 없음')} · ${escapeHtml(item.guardianName || '보호자 미정')}</strong><span>${escapeHtml(item.country || '국가 미정')} · ${escapeHtml(dateShort(item.departureDate))} · ${escapeHtml(item.id)}</span></button>`).join('') : '<div class="empty" style="padding:24px 8px"><p>검색 결과가 없습니다.</p></div>';
+    const customers = items.filter(item => {
+      const hospital = findPartnerHospital(item.partnerHospitalId);
+      return [item.guardianName,item.petName,item.country,item.id,hospital?.name,hospital?.region].join(' ').toLowerCase().includes(searchTerm);
+    });
+    $('customer-items').innerHTML = customers.length ? customers.map(item => `<button type="button" class="customer-item ${item.id === selectedId ? 'active' : ''}" data-id="${escapeHtml(item.id)}"><strong>${escapeHtml(item.petName || '이름 없음')} - ${escapeHtml(item.guardianName || '보호자 미정')} - ${escapeHtml(findPartnerHospital(item.partnerHospitalId)?.region || '지역 미정')}</strong><span>${escapeHtml(item.country || '국가 미정')} · ${escapeHtml(dateShort(item.departureDate))} · ${escapeHtml(item.id)}</span></button>`).join('') : '<div class="empty" style="padding:24px 8px"><p>검색 결과가 없습니다.</p></div>';
     document.querySelectorAll('.customer-item').forEach(button => button.addEventListener('click', () => { if (!busy) select(button.dataset.id).catch(reportError); }));
   }
   function fill(customer, isNew) {
@@ -94,6 +99,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-6';
     $('customer-id').value = customer.id;
     $('guardian-name').value = customer.guardianName || '';
     $('pet-name').value = customer.petName || '';
+    $('partner-hospital').value = customer.partnerHospitalId || '';
     $('country').value = customer.country || '';
     $('departure-date').value = customer.departureDate || '';
     $('next-visit-date').value = customer.nextVisitDate || '';
@@ -129,6 +135,7 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-6';
     return {
       id: $('customer-id').value, shareEnabled: $('share-enabled').checked, guardianName: $('guardian-name').value.trim(), petName: $('pet-name').value.trim(),
       country: $('country').value.trim(), departureDate: $('departure-date').value,
+      partnerHospitalId: $('partner-hospital').value,
       currentStepId: $('current-step').value, nextVisitDate: $('next-visit-date').value,
       nextAction: $('next-action').value.trim(), memo: $('memo').value.trim(),
       payment: {expectedAmount: $('expected-payment').value, actualAmount: $('actual-payment').value, memo: $('payment-memo').value.trim()},
