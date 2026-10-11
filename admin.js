@@ -1,4 +1,4 @@
-import * as TravelPassStore from './firebase-store.js';
+import * as TravelPassStore from './firebase-store.js?v=20261012-1';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);

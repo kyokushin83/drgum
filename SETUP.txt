@@ -2,9 +2,9 @@
 =========================================
 현재 구현: 기존 dr-quarantine-consultations Firebase 프로젝트를 재사용합니다.
 firebase-config.js는 공개 웹 설정만 포함합니다. 서비스 계정 비밀키는 절대 저장소에 넣지 않습니다.
-실제 고객 데이터 저장·조회는 travelPassEnabled=false로 잠겨 있습니다.
-이 작업에서 Firebase 콘솔의 현재 보안 규칙을 확인하거나 배포하지 못했으므로,
-아래 보안 규칙 검증을 마친 뒤에만 활성화하세요.
+고객 데이터 저장·조회는 travelPassEnabled=true로 활성화되었습니다.
+2026-10-12 사용자가 규칙 게시 완료를 알렸고 익명 고객 문서 접근의 PERMISSION_DENIED(403)를 확인했습니다.
+관리자 및 고객 계정으로 실제 저장·조회·권한 테스트는 아직 필요합니다. 아래는 설정과 검증 절차입니다.
 
 1. Firebase Console > dr-quarantine-consultations > Authentication
    - Google 로그인 활성화 상태 확인.

@@ -4,4 +4,4 @@ export const firebaseConfig = {apiKey:"AIzaSyBs7UxrWEREhCOwW23z5SIFALEwHEMplBo",
 export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 export const adminEmails = ["kyokushin83@naver.com","vetjin79@gmail.com","dion5280@naver.com"];
 // Set true ONLY after publishing and testing firestore.rules in this Firebase project.
-export const travelPassEnabled = false;
+export const travelPassEnabled = true;

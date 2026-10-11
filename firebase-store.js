@@ -1,5 +1,5 @@
 import './data-store.js?v=20261011-1';
-import { app, adminEmails, travelPassEnabled } from './firebase-config.js';
+import { app, adminEmails, travelPassEnabled } from './firebase-config.js?v=20261012-1';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy, runTransaction, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
