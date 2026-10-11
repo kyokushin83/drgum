@@ -1,9 +1,33 @@
+import * as TravelPassStore from './firebase-store.js';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
   const id = new URLSearchParams(location.search).get('id');
-  const customer = TravelPassStore.get(id);
-  if (!customer) { $('not-found').classList.remove('hidden'); return; }
+  const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  $('travel-login').onclick = () => TravelPassStore.login().catch(() => { $('travel-auth-status').textContent = '로그인에 실패했습니다. 다시 시도해 주세요.'; });
+  $('travel-logout').onclick = () => TravelPassStore.logout();
+  let version = 0;
+  TravelPassStore.observeAuth(async user => {
+    const currentVersion = ++version;
+    $('pass').classList.add('hidden');
+    $('not-found').classList.add('hidden');
+    document.title = '닥터검역 Travel Pass';
+    $('travel-login').hidden = !!user;
+    $('travel-logout').hidden = !user;
+    $('travel-auth-status').textContent = user ? '고객 계정 UID: ' + user.uid + ' · 담당자에게 이 UID를 알려 주세요.' : '담당자에게 등록한 Google 계정으로 로그인해 주세요.';
+    if (!user) return;
+    try {
+      const customer = await TravelPassStore.get(id);
+      if (currentVersion !== version) return;
+      if (!customer) { $('not-found').classList.remove('hidden'); return; }
+      render(customer);
+    } catch(error) {
+      if (currentVersion !== version) return;
+      $('not-found').classList.remove('hidden');
+      $('travel-auth-status').textContent = '조회할 수 없습니다. 계정 UID: ' + user.uid + ' · 담당자에게 계정 등록 및 주소 확인을 요청해 주세요.';
+    }
+  });
+  function render(customer) {
 
   const steps = Array.isArray(customer.steps) && customer.steps.length ? customer.steps : TravelPassStore.steps;
   const completed = new Set(customer.completedStepIds);
@@ -38,7 +62,8 @@
     const status = isDone ? 'done' : isCurrent ? 'current' : '';
     const icon = isDone ? '✓' : index + 1;
     const suffix = isDone ? ' · 완료' : isCurrent ? ' · 진행 중' : '';
-    return `<li class="${status}"><span class="step-icon">${icon}</span><div class="step-copy"><strong>${step.name}${suffix}</strong><span>${step.description}</span></div></li>`;
+    return `<li class="${status}"><span class="step-icon">${icon}</span><div class="step-copy"><strong>${escapeHtml(step.name)}${suffix}</strong><span>${escapeHtml(step.description)}</span></div></li>`;
   }).join('');
   $('pass').classList.remove('hidden');
+  }
 })();
