@@ -1,15 +1,23 @@
-import { getShared } from './firebase-share.js?v=20261012-3';
+import { demoTravelPass } from './travel-demo.js?v=20261012-5';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
   const token = new URLSearchParams(location.hash.slice(1)).get('token');
+  const isDemo = !token && new URLSearchParams(location.search).get('id') === 'A7K29X';
   const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   async function load() {
     try {
-      const customer = await getShared(token);
+      let customer;
+      if (isDemo) {
+        customer = demoTravelPass;
+      } else {
+        if (!token) throw new Error('고객 공유 링크가 필요합니다.');
+        const { getShared } = await import('./firebase-share.js?v=20261012-3');
+        customer = await getShared(token);
+      }
       if (!customer) throw new Error('공유 링크를 찾을 수 없습니다.');
       render(customer);
-      $('travel-load-status').textContent = '';
+      $('travel-load-status').textContent = isDemo ? '샘플 화면 · 실제 고객 정보가 아닙니다.' : '';
     } catch(error) {
       $('travel-load-status').textContent = '진행 현황을 조회할 수 없습니다. 링크와 인터넷 연결을 확인해 주세요.';
       $('not-found').classList.remove('hidden');
