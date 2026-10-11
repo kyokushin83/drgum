@@ -48,7 +48,7 @@ export async function get(id) {
     const link = await getDoc(linkRef(id));
     return {...customer,shareToken:link.exists() ? link.data().token : '',shareEnabled:link.exists() ? link.data().enabled : true};
   } catch(error) {
-    return {...customer,shareToken:'',shareEnabled:true,shareError:true};
+    return {...customer,shareToken:'',shareEnabled:true,shareError:true,shareErrorCode:error.code || 'unknown'};
   }
 }
 export async function getShared(token) {
@@ -72,7 +72,7 @@ async function publishShare(customer, enabled) {
     if (enabled) {
       const data = privateSnapshot.data();
       const projection = Object.fromEntries(projectionKeys.map(k => [k,data[k]]));
-      tx.set(publicRef, {...projection,active:true,expiresAt:Timestamp.fromMillis(Date.now()+180*86400000),updatedAt:serverTimestamp()});
+      tx.set(publicRef, {...projection,active:true,expiresAt:Timestamp.fromMillis(data.updatedAt.toMillis()+180*86400000),updatedAt:serverTimestamp()});
     } else {
       tx.delete(publicRef);
     }
@@ -103,7 +103,7 @@ export async function save(customer, createOnly = false) {
   try {
     return {...saved,shareToken:await publishShare(saved, saved.shareEnabled)};
   } catch(error) {
-    return {...saved,shareToken:'',shareError:true};
+    return {...saved,shareToken:'',shareError:true,shareErrorCode:error.code || 'unknown'};
   }
 }
 export async function remove(id) {

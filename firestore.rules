@@ -60,70 +60,21 @@ service cloud.firestore {
         && d.expiresAt <= request.time + duration.value(181, 'd')
         && d.updatedAt == request.time;
     }
-    // Token ownership grants only one shared progress document, never the private customer.
     match /travelShares/{token} {
-      allow get: if travelAdmin() || (token.matches('^[a-f0-9]{64}
-      allow create: if request.resource.data.phone is string
-        && request.resource.data.phone.size() >= 9
-        && request.resource.data.phone.size() <= 20
-        && request.resource.data.status == '미연락'
-        && request.resource.data.called == false;
-      allow read, update: if admin();
-      allow delete: if false;
-    }
-    match /{document=**} { allow read, write: if false; }
-  }
-}
-)
+      allow get: if travelAdmin() || (token.matches('^[a-f0-9]{64}$')
         && resource.data.active == true && resource.data.expiresAt > request.time);
       allow list: if false;
-      allow create, update: if travelAdmin() && token.matches('^[a-f0-9]{64}
-      allow create: if request.resource.data.phone is string
-        && request.resource.data.phone.size() >= 9
-        && request.resource.data.phone.size() <= 20
-        && request.resource.data.status == '미연락'
-        && request.resource.data.called == false;
-      allow read, update: if admin();
-      allow delete: if false;
-    }
-    match /{document=**} { allow read, write: if false; }
-  }
-}
-) && validShare();
+      allow create, update: if travelAdmin() && token.matches('^[a-f0-9]{64}$') && validShare();
       allow delete: if travelAdmin();
     }
     match /travelShareLinks/{customerId} {
       allow get, list, delete: if travelAdmin();
       allow create, update: if travelAdmin()
-        && customerId.matches('^[A-Za-z0-9_-]{1,128}
-      allow create: if request.resource.data.phone is string
-        && request.resource.data.phone.size() >= 9
-        && request.resource.data.phone.size() <= 20
-        && request.resource.data.status == '미연락'
-        && request.resource.data.called == false;
-      allow read, update: if admin();
-      allow delete: if false;
-    }
-    match /{document=**} { allow read, write: if false; }
-  }
-}
-)
+        && customerId.matches('^[A-Za-z0-9_-]{1,128}$')
         && request.resource.data.keys().hasAll(['token','enabled','updatedAt'])
         && request.resource.data.keys().hasOnly(['token','enabled','updatedAt'])
         && request.resource.data.token is string
-        && request.resource.data.token.matches('^[a-f0-9]{64}
-      allow create: if request.resource.data.phone is string
-        && request.resource.data.phone.size() >= 9
-        && request.resource.data.phone.size() <= 20
-        && request.resource.data.status == '미연락'
-        && request.resource.data.called == false;
-      allow read, update: if admin();
-      allow delete: if false;
-    }
-    match /{document=**} { allow read, write: if false; }
-  }
-}
-)
+        && request.resource.data.token.matches('^[a-f0-9]{64}$')
         && request.resource.data.enabled is bool
         && request.resource.data.updatedAt == request.time;
     }

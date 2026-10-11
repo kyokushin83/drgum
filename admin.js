@@ -1,4 +1,4 @@
-import * as TravelPassStore from './firebase-store.js?v=20261012-3';
+import * as TravelPassStore from './firebase-store.js?v=20261012-4';
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -109,7 +109,9 @@ import * as TravelPassStore from './firebase-store.js?v=20261012-3';
     if (shareable) $('open-url').href = travelUrl(customer.shareToken);
     $('copy-url').disabled = !shareable;
     $('customer-url-status').textContent = customer.shareError
-      ? '고객 정보는 저장됐지만 공유 설정 반영에 실패했습니다. Firebase 공유 규칙 게시 및 연결을 확인한 뒤 다시 저장해 주세요. 기존 공유 링크는 계속 열릴 수 있습니다.'
+      ? customer.shareErrorCode === 'permission-denied'
+        ? '고객 정보는 저장됐지만 Firebase가 공유 권한을 거부했습니다(permission-denied). 수정된 공유 규칙을 게시한 뒤 다시 저장해 주세요.'
+        : '고객 정보는 저장됐지만 공유 설정에 실패했습니다(' + (customer.shareErrorCode || 'unknown') + '). 연결을 확인하고 다시 저장해 주세요. 기존 링크는 계속 열릴 수 있습니다.'
       : customer.shareEnabled === false
         ? '고객 링크 공유가 중지되었습니다.'
         : shareable
