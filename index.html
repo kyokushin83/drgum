@@ -2,14 +2,14 @@
 <html lang="ko">
 <head><meta charset="utf-8">
 <link rel="shortcut icon" href="https://pet-travel.co.kr/favicon.ico">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>부산 해외동물검역 | 강아지·고양이 해외출국, 광견병 항체가검사 | 닥터검역</title>
-<meta name="description" content="부산 반려동물 해외출국 전문 닥터검역. 강아지·고양이 해외검역, 마이크로칩, 광견병 항체가검사, 건강검진 및 국가별 출국서류를 안내합니다.">
-<meta property="og:title" content="부산 해외동물검역 | 닥터검역"><meta property="og:description" content="강아지·고양이 해외출국 검역, 광견병 항체가검사, 국가별 출국서류 안내">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>전국 반려동물 해외출국 준비 | 강아지·고양이 해외검역 | 닥터검역</title>
+<meta name="description" content="전국 어디서나 이용 가능한 반려동물 해외출국 전문 닥터검역. 강아지·고양이 해외검역, 마이크로칩, 광견병 항체가검사, 건강검진 및 국가별 출국서류를 안내합니다.">
+<meta property="og:title" content="전국 어디서나 반려동물 해외출국 준비 | 닥터검역"><meta property="og:description" content="전국 어디서나 이용 가능. 강아지·고양이 해외출국 검역, 광견병 항체가검사, 국가별 출국서류 안내">
 <meta name="google-site-verification" content="2FvztTYOGYSkl1lsBHGqU9XQsjA59L-682aXk7wmo0I">
 <meta name="naver-site-verification" content="cb5cc46a3f892bccd8f71b70848a04b28666babc">
 <meta name="robots" content="index, follow"><link rel="canonical" href="https://pet-travel.co.kr/">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"VeterinaryCare","name":"닥터검역 부산해외동물검역센터","url":"https://pet-travel.co.kr/","telephone":"+82-10-6495-7571","description":"부산 해외동물검역 전문. 강아지·고양이 해외출국 검역, 마이크로칩, 광견병 항체가검사, 건강검진 및 국가별 출국서류 안내.","address":{"@type":"PostalAddress","addressCountry":"KR","addressRegion":"부산광역시","streetAddress":"수영구 수영로 576 지하상가 E존"},"areaServed":"부산광역시","knowsAbout":["부산 해외동물검역","강아지 해외검역","고양이 해외검역","반려동물 해외출국","광견병 항체가검사","반려동물 출국서류"]}
+{"@context":"https://schema.org","@type":"VeterinaryCare","name":"닥터검역","url":"https://pet-travel.co.kr/","telephone":"+82-10-6495-7571","description":"전국 어디서나 이용 가능한 반려동물 해외출국 준비 및 상담. 강아지·고양이 해외검역, 국가별 출국서류 안내.","areaServed":{"@type":"Country","name":"대한민국"},"knowsAbout":["강아지 해외검역","고양이 해외검역","반려동물 해외출국","광견병 항체가검사","반려동물 출국서류"]}
 </script>
 <style>
 :root{
@@ -524,7 +524,7 @@ button:hover{filter:brightness(.97)}
   <div class="wrap">
     <div class="brand">
       <div class="logo">D</div>
-      <div>닥터검역 부산해외동물검역센터<small>DR. QUARANTINE · PET TRAVEL CENTER</small></div>
+      <div>닥터검역<small>전국 반려동물 해외출국 준비 · DR. QUARANTINE</small></div>
     </div>
   </div>
 </header>
@@ -532,10 +532,10 @@ button:hover{filter:brightness(.97)}
 <main class="hero">
   <div class="wrap grid">
     <section class="intro-panel">
-      <div class="eyebrow">반려동물 해외출국 전문</div>
+      <div class="eyebrow">전국 어디서나 이용 가능</div>
       <h1>어디로 가시나요?<br>바로 준비해드릴게요.</h1>
       <p class="lead">
-        목적지와 출국일만 입력하면 필요한 준비사항과 예상 견적을 바로 확인할 수 있습니다.
+        전국 어디서나 반려동물 해외출국 준비를 도와드립니다. 출국 정보와 거주지역을 선택하면 필요한 준비사항과 예상 견적을 바로 확인할 수 있습니다.
       </p>
       <div class="point">
         <span>수의사 직접 진행</span>
@@ -547,7 +547,7 @@ button:hover{filter:brightness(.97)}
 
     <section class="card">
       <h2>해외출국 준비 확인</h2>
-      <p class="sub">4가지만 입력해주세요.</p>
+      <p class="sub">거주지역까지 5가지만 입력해주세요.</p>
 
       <div class="form-grid">
         <div class="field">
@@ -577,13 +577,20 @@ button:hover{filter:brightness(.97)}
           <label for="date">출국 예정일</label>
           <input id="date" type="date">
         </div>
+        <div class="field full">
+          <label for="region">거주지역 (시·도)</label>
+          <select id="region" required aria-describedby="region-note">
+            <option value="">시·도 선택</option>
+          </select>
+          <small id="region-note" style="display:block;margin-top:7px;color:#64748b;font-size:12px">전국 이용 가능 · 상세 주소는 입력하지 않습니다.</small>
+        </div>
       </div>
 
       <button onclick="showQuote()">일정 및 금액 확인</button>
 
       <div class="center-info">
         <div><b>24시간 콜센터</b> : <a href="tel:01064957571">010-6495-7571</a></div>
-        <div><b>주소</b> : 부산시 수영구 수영로 576 지하상가 E존 <span>(수영역에서 1분)</span></div>
+        <div>전국 어디서나 상담·이용 가능합니다.</div>
       </div>
 
       <div id="result" class="result">
@@ -618,11 +625,6 @@ button:hover{filter:brightness(.97)}
   </div>
 
   <div class="wrap media-section">
-    <div class="store-photo">
-      <img src="doctor-quarantine-store.png" alt="닥터검역 부산해외동물검역센터 실제 매장">
-      <div class="store-photo-caption">닥터검역 부산해외동물검역센터 실제 매장</div>
-    </div>
-
     <div class="interior-gallery">
       <div class="interior-photo">
         <img src="doctor-quarantine-interior-1.png" alt="닥터검역 상담실 내부">
@@ -850,10 +852,11 @@ function showQuote(){
   const registered=document.getElementById("registered").value;
   const pet=document.getElementById("pet").value;
   const date=document.getElementById("date").value;
+  const region=document.getElementById("region").value;
 
-  if(!country || !date){
-    alert("출국 나라, 반려동물, 동물등록 여부, 출국 예정일을 모두 입력해주세요.");
-    return;
+  if(!country || !date || !window.DQRegions.valid(region)){
+    alert("출국 나라, 반려동물, 동물등록 여부, 출국 예정일, 거주지역을 모두 입력해주세요.");
+    return false;
   }
 
   const q=quotes[country] || quotes["기타"];
@@ -864,7 +867,7 @@ function showQuote(){
   const first=q.schedule.reduce((a,b)=>a.days<b.days?a:b);
 
   document.getElementById("resultTitle").textContent=country+" 출국 일정";
-  document.getElementById("resultRoute").textContent=pet+" · "+country+" · "+(registered==="yes"?"내장형 동물등록: 등록":"내장형 동물등록: 미등록")+" · 출국 "+fmtDate(new Date(date+"T12:00:00"));
+  document.getElementById("resultRoute").textContent=pet+" · "+country+" · 거주지역 "+region+" · "+(registered==="yes"?"내장형 동물등록: 등록":"내장형 동물등록: 미등록")+" · 출국 "+fmtDate(new Date(date+"T12:00:00"));
   document.getElementById("resultPrice").textContent="총 예상 "+won(total);
   document.getElementById("firstVisit").textContent=fmtDate(addDays(date,first.days))+"까지";
   document.getElementById("totalPrice").textContent=won(total);
@@ -891,7 +894,8 @@ function showQuote(){
 }
 
 </script>
-<script src="site-tools.js?v=20261007-3"></script>
+<script src="region-data.js?v=20261020-1"></script>
+<script src="site-tools.js?v=20261020-region"></script>
 <style>
 #dq-chat-launcher{position:fixed;right:20px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9999999;display:flex;flex-direction:column;align-items:center;gap:7px;width:124px;height:auto;margin:0;padding:0;border:0;background:transparent;color:#0b1f4a;box-shadow:none;font-family:inherit;text-decoration:none;cursor:pointer}
 #dq-chat-launcher .dq-chat-icon{position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:22px;background:#fee500;color:#191919;box-shadow:0 5px 20px #0b1f4a30}
@@ -905,4 +909,4 @@ function showQuote(){
 </a>
 </body>
 </html>
-<script type="module" src="./consultation-client.js?v=20260927-2"></script>
+<script type="module" src="./consultation-client.js?v=20261020-region"></script>
